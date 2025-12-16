@@ -15,4 +15,6 @@ public interface ProprietarioRepository extends JpaRepository<Proprietario, Long
 
     public Optional<Proprietario> findByNomeContaining(String nome);
 
+    public boolean existsByEmail(String email);
+
 }
