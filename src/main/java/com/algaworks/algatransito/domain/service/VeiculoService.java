@@ -1,6 +1,6 @@
 package com.algaworks.algatransito.domain.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algatransito.domain.exception.NegocioException;
+import com.algaworks.algatransito.domain.model.Proprietario;
 import com.algaworks.algatransito.domain.model.StatusVeiculoEnum;
 import com.algaworks.algatransito.domain.model.Veiculo;
+import com.algaworks.algatransito.domain.repository.ProprietarioRepository;
 import com.algaworks.algatransito.domain.repository.VeiculoRepository;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +21,8 @@ import lombok.AllArgsConstructor;
 public class VeiculoService {
     
     private final VeiculoRepository veiculoRepository;
+
+    private final ProprietarioRepository proprietarioRepository;
 
     public List<Veiculo> listar() {
         return veiculoRepository.findAll();
@@ -30,12 +34,16 @@ public class VeiculoService {
 
     @Transactional
     public Veiculo incluir(Veiculo veiculo) {
+        Proprietario proprietario = proprietarioRepository.findById(veiculo.getProprietario().getId())
+            .orElseThrow(() -> new NegocioException("Proprietário não encontrado."));
+
         if(veiculoRepository.existsByPlaca(veiculo.getPlaca())) {
             throw new NegocioException("Já existe um veiculo com a placa informada.");
         }
 
+        veiculo.setProprietario(proprietario);
         veiculo.setStatus(StatusVeiculoEnum.REGULAR);
-        veiculo.setDataCadastro(LocalDateTime.now());
+        veiculo.setDataCadastro(OffsetDateTime.now());
 
         return veiculoRepository.save(veiculo);
     }

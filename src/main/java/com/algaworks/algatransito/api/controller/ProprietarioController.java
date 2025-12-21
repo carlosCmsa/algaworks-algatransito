@@ -5,12 +5,10 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algatransito.domain.exception.NegocioException;
 import com.algaworks.algatransito.domain.model.Proprietario;
 import com.algaworks.algatransito.domain.service.ProprietarioService;
 
@@ -27,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ProprietarioController {
     
-    private ProprietarioService proprietarioService;
+    private final ProprietarioService proprietarioService;
 
     @GetMapping
     public List<Proprietario> listar() {
@@ -60,8 +58,4 @@ public class ProprietarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @ExceptionHandler(exception = NegocioException.class)
-    public ResponseEntity<String> handlerNegocioException(NegocioException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
 }

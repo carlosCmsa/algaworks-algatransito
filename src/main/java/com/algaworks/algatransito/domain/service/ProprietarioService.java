@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 @Service
 public class ProprietarioService {
     
-    private ProprietarioRepository proprietarioRepository;
+    private final ProprietarioRepository proprietarioRepository;
 
     public List<Proprietario> listar() {
         return proprietarioRepository.findAll();

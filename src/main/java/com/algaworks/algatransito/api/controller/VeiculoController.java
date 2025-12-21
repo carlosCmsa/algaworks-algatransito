@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class VeiculoController {
     
-    private VeiculoService veiculoService;
+    private final VeiculoService veiculoService;
 
     @GetMapping
     public ResponseEntity<List<Veiculo>> listar() {
